@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', 'Company Domains')
+@section('title', 'Company Servers')
 
 @section('page-styles')
     <link rel="stylesheet" href="{{ asset('styles.css') }}">
@@ -13,7 +13,7 @@
                 <div class="card-body">
                     <p class="top">Total</p>
                     <div class="d-flex align-items-center mb-4">
-                        <img src="{{ asset('images/card-money.png') }}" class="img img-fluid" alt="">
+                        <img src="{{ asset('images/card-server.png') }}" class="img img-fluid" alt="">
                         <h4>{{ $total }}</h4>
                     </div>
                     <div class="text-center d-flex align-items-center justify-content-center lower">
@@ -28,14 +28,14 @@
     <div class="card p-4 my-2 main-card">
         <div class="card-body">
             <div class="d-flex align-items-center justify-content-between">
-                <h2>Company Domains</h2>
+                <h2>Company Servers</h2>
                 <input type="text" class="form-control main-search" id="main-search" placeholder="Search">
             </div>
             <div class="d-flex justify-content-between align-items-center my-3">
                 <div class="tabs d-flex">
-                    <button class="blue-btn m-0 px-4" onclick="window.location.href='/company/servers'">Servers</button>
-                    <button class="blue-btn active m-0 px-4"
-                        onclick="window.location.href='/company/domains'">Domains</button>
+                    <button class="blue-btn m-0 px-4 active"
+                        onclick="window.location.href='/company/servers'">Servers</button>
+                    <button class="blue-btn m-0 px-4" onclick="window.location.href='/company/domains'">Domains</button>
                 </div>
                 <div class="filters d-flex align-items-center justify-content-between">
                     <div class="filter py-2 px-3 d-flex align-items-center">
@@ -72,6 +72,7 @@
                         <tr>
                             <th>Sr.No</th>
                             <th>Domain</th>
+                            <th>Server</th>
                             <th>Customer</th>
                             <th>Mobile</th>
                             <th>Project</th>
@@ -79,7 +80,7 @@
                             <th>Purchase</th>
                             <th>Renewal</th>
                             <th>Time</th>
-                            <th>Mark as renew</th>
+                            <th>Renew</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -99,16 +100,20 @@
                 <div class="modal-body p-4">
                     <div class="d-flex align-items-center justify-content-between">
                         <h1></h1>
-                        <h1 class="modal-title text-center" id="addModalLabel">Add New Domain</h1>
+                        <h1 class="modal-title text-center" id="addModalLabel">Add New Server</h1>
                         <button type="button" class="closeBtn" data-bs-dismiss="modal"><i
                                 class="fa-solid fa-x"></i></button>
                     </div>
                     <hr>
-                    <form action="{{ route('company.domains.store') }}" method="post">
+                    <form action="{{ route('company.servers.store') }}" method="post">
                         @csrf
                         <input type="hidden" name="for" value="company">
                         <input type="hidden" name="id" id="id">
                         <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label class="mb-4" for="">Server Name</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
                             <div class="col-md-6 mb-4">
                                 <label class="mb-4" for="">Domain Name</label>
                                 <input type="text" class="form-control" id="domain" name="domain" required>
@@ -172,7 +177,7 @@
                 var hidden = $('#hidden_check').is(':checked');
                 var search = $('#main-search').val();
                 $.ajax({
-                    url: '/company/domains/list',
+                    url: '/company/servers/list',
                     type: 'GET',
                     data: {
                         expiring: expiring,
@@ -194,13 +199,14 @@
             }
 
             $('.addBtn').on('click', function() {
-                $('#addModalLabel').text('Add New Domain');
+                $('#addModalLabel').text('Add New Server');
                 $('#addModal').modal('show');
             });
 
             function actions() {
                 $('.editBtn').on('click', function() {
                     var id = $(this).data('id');
+                    var name = $(this).data('name');
                     var domain = $(this).data('domain');
                     var customer = $(this).data('customer');
                     var mobile = $(this).data('mobile');
@@ -209,6 +215,7 @@
                     var renewal_date = $(this).data('renewal_date');
                     var renewal_amount = $(this).data('renewal_amount');
                     $('#id').val(id);
+                    $('#name').val(name);
                     $('#domain').val(domain);
                     $('#customer').val(customer);
                     $('#mobile').val(mobile);
@@ -216,7 +223,7 @@
                     $('#purchase_date').val(purchase_date);
                     $('#renewal_date').val(renewal_date);
                     $('#renewal_amount').val(renewal_amount);
-                    $('#addModalLabel').text('Edit Domain');
+                    $('#addModalLabel').text('Edit Server');
                     $('#addModal').modal('show');
                 });
                 $('.deleteBtn').on('click', function() {
@@ -232,14 +239,14 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
-                                url: '/company/domains/delete/' + id,
+                                url: '/company/servers/delete/' + id,
                                 type: 'GET',
                                 success: function(response) {
                                     if (response.success) {
                                         list();
                                         Swal.fire(
                                             'Deleted!',
-                                            'Domain has been deleted.',
+                                            'Server has been deleted.',
                                             'success'
                                         )
                                     } else {
@@ -274,14 +281,14 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
-                                url: '/company/domains/hide/' + id,
+                                url: '/company/servers/hide/' + id,
                                 type: 'GET',
                                 success: function(response) {
                                     if (response.success) {
                                         list();
                                         Swal.fire(
                                             'Hidden!',
-                                            'Domain has been hidden.',
+                                            'Server has been hidden.',
                                             'success'
                                         )
                                     } else {
@@ -296,6 +303,50 @@
                                     Swal.fire(
                                         'Error!',
                                         'There was an error hiding.',
+                                        'error'
+                                    )
+                                }
+                            });
+                        }
+                    });
+                });
+
+                $('.btnRenew').click(function() {
+                    var month = $(this).data('month');
+                    var id = $(this).data('id');
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You want to renew this for " + month + " month(s)!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, renew it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: '/company/servers/renew/' + id + '/' + month,
+                                type: 'GET',
+                                success: function(response) {
+                                    if (response.success) {
+                                        list();
+                                        Swal.fire(
+                                            'Renewed!',
+                                            'Server has been renewed.',
+                                            'success'
+                                        )
+                                    } else {
+                                        Swal.fire(
+                                            'Error!',
+                                            'There was an error renewing.',
+                                            'error'
+                                        )
+                                    }
+                                },
+                                error: function(err) {
+                                    Swal.fire(
+                                        'Error!',
+                                        'There was an error renewing.',
                                         'error'
                                     )
                                 }
@@ -329,6 +380,7 @@
                         <tr>
                             <td>${domain.id}</td>
                             <td>${domain.domain}</td>
+                            <td>${domain.name}</td>
                             <td>${domain.customer}</td>
                             <td>${domain.mobile}</td>
                             <td>${domain.project}</td>
@@ -336,11 +388,15 @@
                             <td>${purchaseDate}</td>
                             <td>${renewalDate}</td>
                             <td><span class="time-badge ${badgeClass}">${statusText}</span></td>
-                            <td><input class="renewal-input" data-id="${domain.id}" type="checkbox"></td>
+                            <td><button class="btnRenew" data-id="${domain.id}"  data-month="1">1 Month</button>
+                                <button class="btnRenew btnRenew2" data-id="${domain.id}" data-month="2">2 Month</button>
+                                <button class="btnRenew btnRenew3" data-id="${domain.id}" data-month="3">3 Month</button>
+                            </td>
                             <td class="table-btns">
                                 <button class="editBtn" 
                                     data-id="${domain.id}" 
                                     data-domain="${domain.domain}" 
+                                    data-name="${domain.name}" 
                                     data-customer="${domain.customer}"
                                     data-mobile="${domain.mobile}" 
                                     data-project="${domain.project}"

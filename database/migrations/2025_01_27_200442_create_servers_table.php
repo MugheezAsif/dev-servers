@@ -16,6 +16,7 @@ return new class extends Migration
             $table->enum('for', ['company', 'customer'])->default('customer');
             $table->string('domain')->unique();
             $table->string('customer');
+            $table->string('name');
             $table->string('mobile');
             $table->string('project');
             $table->integer('renewal_amount')->default(0);

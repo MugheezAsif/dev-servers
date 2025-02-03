@@ -1,0 +1,156 @@
+.main-card h2 {
+    color: #0F5494;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.main-card .main-search {
+    box-shadow: 0 0 10px rgb(0 0 0 / 10%);
+    max-width: 200px;
+}
+
+.main-card .filter {
+    border: 1px solid #EFEFEF;
+    background: #F9F9F9;
+    border-radius: 6px;
+}
+
+.table-side {
+    max-width: 100%;
+    overflow-x: auto;
+    border-radius: 10px;
+}
+
+.btnRenew {
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    padding: 4px 8px;
+    background: #59E5CE;
+}
+
+.btnRenew2 {
+    background: #FFBB00;
+}
+
+.btnRenew3 {
+    color: #fff;
+    background: #405FDC;
+}
+
+table thead {
+    background: #005EB4;
+    color: #fff;
+    border-radius: 6px;
+}
+
+table {
+    background: #F6F6F6;
+    padding: 10px;
+    min-width: 100%;
+}
+
+table th,
+table td {
+    white-space: nowrap;
+    font-weight: 400;
+    padding: 12px 18px;
+    font-size: 14px;
+}
+
+.table-btns button {
+    border-radius: 5px;
+    border: 1px solid #005EB4;
+    padding: 4px 8px;
+    background: transparent;
+}
+
+.table-btns .editBtn {
+    border-color: #149523;
+    color: #149523;
+}
+
+.table-btns .deleteBtn {
+    border-color: #D91E18;
+    color: #D91E18;
+}
+
+.table-btns .hideBtn {
+    border: none;
+}
+
+.time-badge {
+    padding: 4px;
+    color: #000;
+    border-radius: 2px;
+}
+
+.time-badge.badge-warning {
+    background: #FFBB0033;
+    border: 1px solid #FFBB00;
+}
+
+.time-badge.badge-danger {
+    background: #FF5F0A33;
+    border: 1px solid #FF5F0A;
+    color: #FF5F0A;
+}
+
+.time-badge.badge-expired {
+    background: #FF0A0A33;
+    border: 1px solid #FF0A0A;
+    color: #FF0000;
+}
+
+.time-badge.badge-success {
+    background: #0A8CFF33;
+    border: 1px solid #0A8CFF;
+    color: #0A8CFF;
+}
+
+.modal .modal-title {
+    color: #0F5494;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.modal label {
+    font-size: 16px;
+    font-weight: 300;
+}
+
+.modal input {
+    background: #F6F6F6;
+}
+
+.modal .closeBtn {
+    color: #fff;
+    background: #D91E18;
+    border-radius: 6px;
+    padding: 4px 12px;
+    border: none;
+}
+
+#pagination {
+    padding: 16px 28px;
+    border: .3px solid #4449A6;
+    border-radius: 10px;
+    display: inline-block;
+    margin-top: 20px;
+    box-shadow: 0 0 10px rgb(0 0 0 / 10%);
+    float: right;
+}
+
+#pagination button {
+    margin-right: 12px;
+    background: transparent;
+    color: #1E1E1E;
+    border: none;
+    padding: 4px 10px;
+}
+
+#pagination button.active {
+    background: #005EB4;
+    color: #fff;
+    border-radius: 6px;
+}

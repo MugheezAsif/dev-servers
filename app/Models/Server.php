@@ -19,11 +19,12 @@ class Server extends Model
         'renewal_date',
         'renewal_amount',
         'status',
+        'name',
         'hidden',
     ];
 
-    protected $dates = [
-        'purchase_date',
-        'renewal_date',
+    protected $casts = [
+        'purchase_date' => 'datetime',
+        'renewal_date' => 'datetime',
     ];
 }

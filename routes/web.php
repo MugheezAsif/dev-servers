@@ -61,6 +61,11 @@ Route::group(
                     ],
                     function () {
                         Route::get('/', [ServerController::class, 'companyIndex'])->name('index');
+                        Route::get('list', [ServerController::class, 'list'])->name('list');
+                        Route::get('delete/{id}', [ServerController::class, 'delete'])->name('delete');
+                        Route::get('renew/{id}/{months}', [ServerController::class, 'renew'])->name('renew');
+                        Route::get('hide/{id}', [ServerController::class, 'hide'])->name('hide');
+                        Route::post('/', [ServerController::class, 'store'])->name('store');
                     }
                 );
             }
@@ -80,6 +85,10 @@ Route::group(
                     ],
                     function () {
                         Route::get('/', [DomainController::class, 'customerIndex'])->name('index');
+                        Route::get('list', [DomainController::class, 'list'])->name('list');
+                        Route::get('delete/{id}', [DomainController::class, 'delete'])->name('delete');
+                        Route::get('hide/{id}', [DomainController::class, 'hide'])->name('hide');
+                        Route::post('/', [DomainController::class, 'store'])->name('store');
                     }
                 );
 
@@ -90,6 +99,11 @@ Route::group(
                     ],
                     function () {
                         Route::get('/', [ServerController::class, 'customerIndex'])->name('index');
+                        Route::get('list', [ServerController::class, 'list'])->name('list');
+                        Route::get('delete/{id}', [ServerController::class, 'delete'])->name('delete');
+                        Route::get('hide/{id}', [ServerController::class, 'hide'])->name('hide');
+                        Route::get('renew/{id}/{months}', [ServerController::class, 'renew'])->name('renew');
+                        Route::post('/', [ServerController::class, 'store'])->name('store');
                     }
                 );
             }

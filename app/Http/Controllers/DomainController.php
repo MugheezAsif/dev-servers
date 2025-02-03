@@ -10,13 +10,22 @@ class DomainController extends Controller
     public function companyIndex()
     {
         $page = 'company';
-        $domains = Domain::where('for', 'company')->get();
-        return view('domains.company', compact('page', 'domains'));
+        $total = Domain::where('for', 'company')->count();
+        $customers = Domain::where('for', 'company')->distinct('customer')->count('customer');
+        return view('domains.company', compact('page', 'total', 'customers'));
+    }
+
+    public function customerIndex()
+    {
+        $page = 'customer';
+        $total = Domain::where('for', 'customer')->count();
+        $customers = Domain::where('for', 'customer')->distinct('customer')->count('customer');
+        return view('domains.customer', compact('page', 'total', 'customers'));
     }
 
     public function list(Request $request)
     {
-        $query = Domain::where('for', 'company');
+        $query = Domain::where('for', $request->for);
         if ($request->expiring === 'true') {
             $query->where('renewal_date', '<', now()->addDays(10))
                 ->where('renewal_date', '>=', now());
@@ -30,10 +39,9 @@ class DomainController extends Controller
             $query->where('hidden', false);
         }
         if ($request->search) {
-            $query->where('domain', 'like', '%' . $request->search . '%')
-                ->orWhere('customer', 'like', '%' . $request->search . '%');
+            $query->where('domain', 'like', '%' . $request->search . '%');
         }
-        $domains = $query->get();
+        $domains = $query->orderBy('id', 'desc')->paginate(10);
         return response()->json($domains);
     }
 

@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', 'Company Domains')
+@section('title', 'Customer Domains')
 
 @section('page-styles')
     <link rel="stylesheet" href="{{ asset('styles.css') }}">
@@ -28,14 +28,14 @@
     <div class="card p-4 my-2 main-card">
         <div class="card-body">
             <div class="d-flex align-items-center justify-content-between">
-                <h2>Company Domains</h2>
+                <h2>Customer Domains</h2>
                 <input type="text" class="form-control main-search" id="main-search" placeholder="Search">
             </div>
             <div class="d-flex justify-content-between align-items-center my-3">
                 <div class="tabs d-flex">
-                    <button class="blue-btn m-0 px-4" onclick="window.location.href='/company/servers'">Servers</button>
+                    <button class="blue-btn m-0 px-4" onclick="window.location.href='/customer/servers'">Servers</button>
                     <button class="blue-btn active m-0 px-4"
-                        onclick="window.location.href='/company/domains'">Domains</button>
+                        onclick="window.location.href='/customer/domains'">Domains</button>
                 </div>
                 <div class="filters d-flex align-items-center justify-content-between">
                     <div class="filter py-2 px-3 d-flex align-items-center">
@@ -104,9 +104,9 @@
                                 class="fa-solid fa-x"></i></button>
                     </div>
                     <hr>
-                    <form action="{{ route('company.domains.store') }}" method="post">
+                    <form action="{{ route('customer.domains.store') }}" method="post">
                         @csrf
-                        <input type="hidden" name="for" value="company">
+                        <input type="hidden" name="for" value="customer">
                         <input type="hidden" name="id" id="id">
                         <div class="row">
                             <div class="col-md-6 mb-4">
@@ -172,14 +172,14 @@
                 var hidden = $('#hidden_check').is(':checked');
                 var search = $('#main-search').val();
                 $.ajax({
-                    url: '/company/domains/list',
+                    url: '/customer/domains/list',
                     type: 'GET',
                     data: {
                         expiring: expiring,
                         expired: expired,
                         hidden: hidden,
                         search: search,
-                        for: 'company',
+                        for: 'customer',
                         page: page
                     },
                     success: function(response) {
@@ -232,7 +232,7 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
-                                url: '/company/domains/delete/' + id,
+                                url: '/customer/domains/delete/' + id,
                                 type: 'GET',
                                 success: function(response) {
                                     if (response.success) {
@@ -274,7 +274,7 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
-                                url: '/company/domains/hide/' + id,
+                                url: '/customer/domains/hide/' + id,
                                 type: 'GET',
                                 success: function(response) {
                                     if (response.success) {

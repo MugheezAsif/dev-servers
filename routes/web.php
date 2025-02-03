@@ -47,7 +47,9 @@ Route::group(
                     ],
                     function () {
                         Route::get('/', [DomainController::class, 'companyIndex'])->name('index');
+                        Route::get('list', [DomainController::class, 'list'])->name('list');
                         Route::get('delete/{id}', [DomainController::class, 'delete'])->name('delete');
+                        Route::get('hide/{id}', [DomainController::class, 'hide'])->name('hide');
                         Route::post('/', [DomainController::class, 'store'])->name('store');
                     }
                 );

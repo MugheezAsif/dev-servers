@@ -10,7 +10,31 @@ class DomainController extends Controller
     public function companyIndex()
     {
         $page = 'company';
-        return view('domains.company', compact('page'));
+        $domains = Domain::where('for', 'company')->get();
+        return view('domains.company', compact('page', 'domains'));
+    }
+
+    public function list(Request $request)
+    {
+        $query = Domain::where('for', 'company');
+        if ($request->expiring === 'true') {
+            $query->where('renewal_date', '<', now()->addDays(10))
+                ->where('renewal_date', '>=', now());
+        }
+        if ($request->expired === 'true') {
+            $query->where('renewal_date', '<', now());
+        }
+        if ($request->hidden === 'true') {
+            $query->where('hidden', true);
+        } else {
+            $query->where('hidden', false);
+        }
+        if ($request->search) {
+            $query->where('domain', 'like', '%' . $request->search . '%')
+                ->orWhere('customer', 'like', '%' . $request->search . '%');
+        }
+        $domains = $query->get();
+        return response()->json($domains);
     }
 
     public function store(Request $request)
@@ -34,6 +58,18 @@ class DomainController extends Controller
     public function delete($id)
     {
         Domain::findOrFail($id)->delete();
+        return response()->json(['success' => 'Domain deleted successfully!']);
+    }
+
+    public function hide($id)
+    {
+        $domain = Domain::findOrFail($id);
+        if ($domain->hidden) {
+            $domain->hidden = 0;
+        } else {
+            $domain->hidden = 1;
+        }
+        $domain->save();
         return response()->json(['success' => 'Domain deleted successfully!']);
     }
 }

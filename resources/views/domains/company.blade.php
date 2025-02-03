@@ -145,7 +145,7 @@
         <div class="card-body">
             <div class="d-flex align-items-center justify-content-between">
                 <h2>Company Domains</h2>
-                <input type="text" class="form-control main-search" placeholder="Search">
+                <input type="text" class="form-control main-search" id="main-search" placeholder="Search">
             </div>
             <div class="d-flex justify-content-between align-items-center my-3">
                 <div class="tabs d-flex">
@@ -200,74 +200,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>www.example.com</td>
-                            <td>John Doe</td>
-                            <td>1234567890</td>
-                            <td>Project 1</td>
-                            <td>$100</td>
-                            <td>12/12/2021</td>
-                            <td>12/12/2022</td>
-                            <td><span class="time-badge badge-warning">100 Days</span></td>
-                            <td><input type="checkbox"></td>
-                            <td class="table-btns">
-                                <button class="editBtn"><i class="fa-regular fa-pen-to-square"></i></button>
-                                <button class="deleteBtn"><i class="fa-regular fa-trash-can"></i></button>
-                                <button class="hideBtn"><i class="fa-regular fa-eye"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>www.example.com</td>
-                            <td>John Doe</td>
-                            <td>1234567890</td>
-                            <td>Project 1</td>
-                            <td>$100</td>
-                            <td>12/12/2021</td>
-                            <td>12/12/2022</td>
-                            <td><span class="time-badge badge-danger">10 Days</span></td>
-                            <td><input type="checkbox"></td>
-                            <td class="table-btns">
-                                <button class="editBtn"><i class="fa-regular fa-pen-to-square"></i></button>
-                                <button class="deleteBtn"><i class="fa-regular fa-trash-can"></i></button>
-                                <button class="hideBtn"><i class="fa-regular fa-eye"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>www.example.com</td>
-                            <td>John Doe</td>
-                            <td>1234567890</td>
-                            <td>Project 1</td>
-                            <td>$100</td>
-                            <td>12/12/2021</td>
-                            <td>12/12/2022</td>
-                            <td><span class="time-badge badge-expired">Expired</span></td>
-                            <td><input type="checkbox"></td>
-                            <td class="table-btns">
-                                <button class="editBtn"><i class="fa-regular fa-pen-to-square"></i></button>
-                                <button class="deleteBtn"><i class="fa-regular fa-trash-can"></i></button>
-                                <button class="hideBtn"><i class="fa-regular fa-eye"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>www.example.com</td>
-                            <td>John Doe</td>
-                            <td>1234567890</td>
-                            <td>Project 1</td>
-                            <td>$100</td>
-                            <td>12/12/2021</td>
-                            <td>12/12/2022</td>
-                            <td><span class="time-badge badge-success">365 Days</span></td>
-                            <td><input type="checkbox"></td>
-                            <td class="table-btns">
-                                <button class="editBtn"><i class="fa-regular fa-pen-to-square"></i></button>
-                                <button class="deleteBtn" data-id='5'><i class="fa-regular fa-trash-can"></i></button>
-                                <button class="hideBtn"><i class="fa-regular fa-eye"></i></button>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -335,73 +267,196 @@
 @section('page-scripts')
     <script>
         $(function() {
+            $('#expiring_check, #expired_check, #hidden_check, #main-search').on('change keyup', function() {
+                list();
+            });
+
+            $(document).ready(function() {
+                list();
+            });
+
+            function list() {
+                var expiring = $('#expiring_check').is(':checked');
+                var expired = $('#expired_check').is(':checked');
+                var hidden = $('#hidden_check').is(':checked');
+                var search = $('#main-search').val();
+                $.ajax({
+                    url: '/company/domains/list',
+                    type: 'GET',
+                    data: {
+                        expiring: expiring,
+                        expired: expired,
+                        hidden: hidden,
+                        search: search,
+                        for: 'company'
+                    },
+                    success: function(response) {
+                        renderTable(response);
+                        actions();
+                    },
+                    error: function() {
+                        alert('Error fetching data.');
+                    }
+                });
+            }
+
             $('.addBtn').on('click', function() {
                 $('#addModalLabel').text('Add New Domain');
                 $('#addModal').modal('show');
             });
 
-            $('.editBtn').on('click', function() {
-                var id = $(this).data('id');
-                var domain = $(this).data('domain');
-                var customer = $(this).data('customer');
-                var mobile = $(this).data('mobile');
-                var project = $(this).data('project');
-                var purchase_date = $(this).data('purchase_date');
-                var renewal_date = $(this).data('renewal_date');
-                var renewal_amount = $(this).data('renewal_amount');
-                $('#id').val(id);
-                $('#domain').val(domain);
-                $('#customer').val(customer);
-                $('#mobile').val(mobile);
-                $('#project').val(project);
-                $('#purchase_date').val(purchase_date);
-                $('#renewal_date').val(renewal_date);
-                $('#renewal_amount').val(renewal_amount);
-                $('#addModalLabel').text('Edit Domain');
-                $('#addModal').modal('show');
-            });
-
-            $('.deleteBtn').on('click', function() {
-                var id = $(this).data('id');
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: '/company/domains/delete/' + id,
-                            type: 'GET',
-                            success: function(response) {
-                                if (response.success) {
-                                    Swal.fire(
-                                        'Deleted!',
-                                        'Domain has been deleted.',
-                                        'success'
-                                    )
-                                } else {
+            function actions() {
+                $('.editBtn').on('click', function() {
+                    var id = $(this).data('id');
+                    var domain = $(this).data('domain');
+                    var customer = $(this).data('customer');
+                    var mobile = $(this).data('mobile');
+                    var project = $(this).data('project');
+                    var purchase_date = $(this).data('purchase_date');
+                    var renewal_date = $(this).data('renewal_date');
+                    var renewal_amount = $(this).data('renewal_amount');
+                    $('#id').val(id);
+                    $('#domain').val(domain);
+                    $('#customer').val(customer);
+                    $('#mobile').val(mobile);
+                    $('#project').val(project);
+                    $('#purchase_date').val(purchase_date);
+                    $('#renewal_date').val(renewal_date);
+                    $('#renewal_amount').val(renewal_amount);
+                    $('#addModalLabel').text('Edit Domain');
+                    $('#addModal').modal('show');
+                });
+                $('.deleteBtn').on('click', function() {
+                    var id = $(this).data('id');
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: '/company/domains/delete/' + id,
+                                type: 'GET',
+                                success: function(response) {
+                                    if (response.success) {
+                                        list();
+                                        Swal.fire(
+                                            'Deleted!',
+                                            'Domain has been deleted.',
+                                            'success'
+                                        )
+                                    } else {
+                                        Swal.fire(
+                                            'Error!',
+                                            'There was an error deleting.',
+                                            'error'
+                                        )
+                                    }
+                                },
+                                error: function(err) {
                                     Swal.fire(
                                         'Error!',
                                         'There was an error deleting.',
                                         'error'
                                     )
                                 }
-                            },
-                            error: function(err) {
-                                Swal.fire(
-                                    'Error!',
-                                    'There was an error deleting.',
-                                    'error'
-                                )
-                            }
-                        });
-                    }
+                            });
+                        }
+                    });
                 });
-            });
+                $('.hideBtn').on('click', function() {
+                    var id = $(this).data('id');
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You want to hide this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, hide it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: '/company/domains/hide/' + id,
+                                type: 'GET',
+                                success: function(response) {
+                                    if (response.success) {
+                                        list();
+                                        Swal.fire(
+                                            'Hidden!',
+                                            'Domain has been hidden.',
+                                            'success'
+                                        )
+                                    } else {
+                                        Swal.fire(
+                                            'Error!',
+                                            'There was an error hiding.',
+                                            'error'
+                                        )
+                                    }
+                                },
+                                error: function(err) {
+                                    Swal.fire(
+                                        'Error!',
+                                        'There was an error hiding.',
+                                        'error'
+                                    )
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+
+            function renderTable(domains) {
+                var tbody = $('tbody');
+                tbody.empty();
+                $.each(domains, function(index, domain) {
+                    var renewalDate = new Date(domain.renewal_date);
+                    var today = new Date();
+                    var diffInDays = Math.floor((renewalDate - today) / (1000 * 60 * 60 * 24));
+                    var badgeClass = '';
+                    if (renewalDate < today) {
+                        badgeClass = 'badge-expired';
+                    } else if (diffInDays < 10) {
+                        badgeClass = 'badge-danger';
+                    } else if (diffInDays < 30) {
+                        badgeClass = 'badge-warning';
+                    } else {
+                        badgeClass = 'badge-success';
+                    }
+                    var statusText = renewalDate < today ? 'Expired' : diffInDays + ' Days';
+                    var row = `
+                        <tr>
+                            <td>${domain.id}</td>
+                            <td>${domain.domain}</td>
+                            <td>${domain.customer}</td>
+                            <td>${domain.mobile}</td>
+                            <td>${domain.project}</td>
+                            <td>${domain.renewal_amount}</td>
+                            <td>${new Date(domain.purchase_date).toLocaleDateString()}</td>
+                            <td>${new Date(domain.renewal_date).toLocaleDateString()}</td>
+                            <td><span class="time-badge ${badgeClass}">${statusText}</span></td>
+                            <td><input class="renewal-input" data-id="${domain.id}" type="checkbox"></td>
+                            <td class="table-btns">
+                                <button class="editBtn" data-id="${domain.id}" data-domain="${domain.domain}" data-customer="${domain.customer}"
+                                    data-mobile="${domain.mobile}" data-project="${domain.project}"
+                                    data-purchase_date="${domain.purchase_date}" data-renewal_date="${domain.renewal_date}"
+                                    data-renewal_amount="${domain.renewal_amount}">
+                                    <i class="fa-regular fa-pen-to-square"></i>
+                                </button>
+                                <button class="deleteBtn" data-id="${domain.id}"><i class="fa-regular fa-trash-can"></i></button>
+                                <button class="hideBtn" data-id="${domain.id}"><i class="fa-regular fa-eye"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.append(row);
+                });
+            }
         });
     </script>
 @endsection

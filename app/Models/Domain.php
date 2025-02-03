@@ -22,8 +22,8 @@ class Domain extends Model
         'hidden',
     ];
 
-    protected $dates = [
-        'purchase_date',
-        'renewal_date',
+    protected $casts = [
+        'purchase_date' => 'datetime',
+        'renewal_date' => 'datetime',
     ];
 }

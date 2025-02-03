@@ -26,5 +26,9 @@ class DatabaseSeeder extends Seeder
         $user->email = 'admin@admin.com';
         $user->pin = '1234';
         $user->save();
+
+        $this->call([
+            DomainSeeder::class,
+        ]);
     }
 }

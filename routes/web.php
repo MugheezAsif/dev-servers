@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DomainController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ServerController;
 
 /*
@@ -106,6 +107,17 @@ Route::group(
                         Route::post('/', [ServerController::class, 'store'])->name('store');
                     }
                 );
+            }
+        );
+
+        Route::group(
+            [
+                'as' => 'payments.',
+                'prefix' => 'payments'
+            ],
+            function () {
+                Route::get('/', [PaymentController::class, 'index'])->name('index');
+                Route::get('list', [PaymentController::class, 'list'])->name('list');
             }
         );
         

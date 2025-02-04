@@ -142,7 +142,7 @@
                 class="my-3 {{ $page == 'customer' ? 'active' : '' }} text-nowrap"><img
                     src="{{ asset('images/menu-2.svg') }}" alt="">Customer
                 Data</a>
-            <a href="#" class="my-3 {{ $page == 'payment' ? 'active' : '' }} text-nowrap"><img
+            <a href="{{ route('payments.index') }}" class="my-3 {{ $page == 'payments' ? 'active' : '' }} text-nowrap"><img
                     src="{{ asset('images/menu-1.svg') }}" alt="">Payment
                 History</a>
             <a href="{{ route('company.domains.index') }}"

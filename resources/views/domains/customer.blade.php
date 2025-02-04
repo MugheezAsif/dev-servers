@@ -13,7 +13,7 @@
                 <div class="card-body">
                     <p class="top">Total</p>
                     <div class="d-flex align-items-center mb-4">
-                        <img src="{{ asset('images/card-money.png') }}" class="img img-fluid" alt="">
+                        <img src="{{ asset('images/card-website.png') }}" class="img img-fluid" alt="">
                         <h4>{{ $total }}</h4>
                     </div>
                     <div class="text-center d-flex align-items-center justify-content-center lower">
